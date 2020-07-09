@@ -9,9 +9,10 @@ import com.agilent.cps.utils.ElementManager;
 
 public class BaseTest{
 	
+	Browser browser = new Browser();
+	
 	@BeforeMethod
 	public void startBrowser() {
-		Browser browser = new Browser();
 		browser.startBrowser("https://www.google.co.in/");
 	}
 	

@@ -18,7 +18,6 @@ import org.openqa.selenium.WebDriver;
 public class ScreenShotUtility {
 	
 	private static final ScreenShotUtility screenShotUtility = new ScreenShotUtility();
-	public String imagePath = "";
 	public static ElementManager elementManager = ElementManager.getInstance();
 	
 	public static ScreenShotUtility getInstance()
@@ -30,7 +29,7 @@ public class ScreenShotUtility {
 	{
 		try {
 			File source = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(source, new File(imagePath+imageName));
+			FileUtils.copyFile(source, new File(imageName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -78,7 +77,7 @@ public class ScreenShotUtility {
 					y+=windowheight;
 					command = "window.scrollTo(0,"+(windowheight+(windowheight*i))+");";
 			}
-			ImageIO.write(result, "png", new File(imagePath+imageName));
+			ImageIO.write(result, "png", new File(imageName));
 			command = "window.scrollTo(0,0);";
 			elementManager.sleep(.5);
 			js.executeScript(command);
