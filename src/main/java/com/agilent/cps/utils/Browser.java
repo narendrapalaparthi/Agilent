@@ -16,7 +16,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class Browser{
 	
-	public static ElementManager elementManager = ElementManager.getInstance();
+	public static DriverManager elementManager = DriverManager.getInstance();
 	
 	/*
 	 * To Initiate and Load URL into Browser

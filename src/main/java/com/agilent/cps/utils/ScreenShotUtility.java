@@ -18,7 +18,7 @@ import org.openqa.selenium.WebDriver;
 public class ScreenShotUtility {
 	
 	private static final ScreenShotUtility screenShotUtility = new ScreenShotUtility();
-	public static ElementManager elementManager = ElementManager.getInstance();
+	public static DriverManager elementManager = DriverManager.getInstance();
 	
 	public static ScreenShotUtility getInstance()
 	{

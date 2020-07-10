@@ -15,7 +15,7 @@ public class FieldActions {
 	public Map<String, Method> methodsMap = new  HashMap<String, Method>();
 	
 	public static final FieldActions fieldActions = new FieldActions();
-	public static ElementManager elementManager = ElementManager.getInstance();
+	public static DriverManager elementManager = DriverManager.getInstance();
 	
 	/*
 	 * Singleton Implementation

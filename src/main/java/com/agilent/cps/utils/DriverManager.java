@@ -16,16 +16,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.common.base.Stopwatch;
 
-public class ElementManager {
+public class DriverManager {
 	
 	public WebDriver driver = null;
 	public Map<String, WebDriver> driverMap = new HashMap<String, WebDriver>();
-	public static final ElementManager elementManager = new ElementManager();
+	public static final DriverManager elementManager = new DriverManager();
 	
 	/*
 	 * Sigleton Implementation 
 	 */
-	public static ElementManager getInstance()
+	public static DriverManager getInstance()
 	{
 		return elementManager;
 	}
