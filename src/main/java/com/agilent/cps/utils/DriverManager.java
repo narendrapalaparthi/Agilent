@@ -1,6 +1,5 @@
 package com.agilent.cps.utils;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -9,8 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.LocalFileDetector;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -20,14 +17,14 @@ public class DriverManager {
 	
 	public WebDriver driver = null;
 	public Map<String, WebDriver> driverMap = new HashMap<String, WebDriver>();
-	public static final DriverManager elementManager = new DriverManager();
+	public static final DriverManager driverManager = new DriverManager();
 	
 	/*
 	 * Sigleton Implementation 
 	 */
 	public static DriverManager getInstance()
 	{
-		return elementManager;
+		return driverManager;
 	}
 	
 	/*
@@ -67,7 +64,7 @@ public class DriverManager {
 	 */
 	public void waitForWidget(String fieldName, String fieldType, long timeOutInSeconds, double d)
 	{
-		By locator = getLocator(fieldName, fieldType, true);
+		By locator = getLocator(fieldName, fieldType);
 		Stopwatch sw = Stopwatch.createStarted();
 		sleep(.5);
 		do
@@ -103,13 +100,8 @@ public class DriverManager {
 	}
 	
 	public void selectFrame(String frameLocator){
-		WebElement element = driver.findElement(getLocator(frameLocator));
+		WebElement element = driver.findElement(getLocator(frameLocator, null));
 		driver.switchTo().frame(element);
-	}
-	
-	public String getValue(String locator){
-		WebElement element = driver.findElement(getLocator(locator));
-		return element.getAttribute("value");
 	}
 	
 	/*
@@ -137,7 +129,7 @@ public class DriverManager {
 	 */
 	public boolean widgetExists(String fieldName, String fieldType, long timeOutInSeconds, double intervalInSeconds)
 	{
-		By locator = getLocator(fieldName, fieldType, true);
+		By locator = getLocator(fieldName, fieldType);
 		Stopwatch sw = Stopwatch.createStarted();
 		do
 		{
@@ -158,7 +150,7 @@ public class DriverManager {
 	 */
 	public boolean widgetNotExists(String fieldName, String fieldType, long timeOutInSeconds, double intervalInSeconds)
 	{
-		By locator = getLocator(fieldName, fieldType, true);
+		By locator = getLocator(fieldName, fieldType);
 		Stopwatch sw = Stopwatch.createStarted();
 		do
 		{
@@ -179,7 +171,7 @@ public class DriverManager {
 	 */
 	public boolean widgetVisible(String fieldName, String fieldType, long timeOutInSeconds, double interval)
 	{
-		By locator = getLocator(fieldName, fieldType, true);
+		By locator = getLocator(fieldName, fieldType);
 		WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds, (long) (interval*1000));
 		try{
 			wait.until(ExpectedConditions.presenceOfElementLocated(locator));
@@ -196,7 +188,7 @@ public class DriverManager {
 	 */
 	public boolean widgetEnabled(String fieldName, String fieldType, long timeOutInSeconds, double interval)
 	{
-		By locator = getLocator(fieldName, fieldType, true);
+		By locator = getLocator(fieldName, fieldType);
 		WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds, (long) (interval*1000));
 		try{
 			wait.until(ExpectedConditions.elementToBeClickable(locator));
@@ -296,72 +288,19 @@ public class DriverManager {
 	/*
 	 * Return Web Element based on Field Name & Style
 	 */
-	public WebElement getWebElement(String fieldName, String fieldType, boolean xpathConstuctor) {
+	public WebElement getWebElement(String fieldName, String fieldType) {
 		waitForPageToLoad();
-		WebElement element = driver.findElement(getLocator(fieldName, fieldType, xpathConstuctor));
-//		getJSExecutor().executeScript("arguments[0].setAttribute('style', 'background-color: red')", element);
+		WebElement element = driver.findElement(getLocator(fieldName, fieldType));
 		return  element;
 	}
 	
 	/*
 	 *  Constucts xpath string based on Field Name & Style
 	 */
-	public By getLocator(String fieldName, String fieldType, boolean xpathConstuctor) {
-		String elementPath;
-		if(xpathConstuctor){
-			if("Dropdown".equals(fieldType))
-			elementPath = "//select[@name='" + fieldName + "' or " + "@value='" + fieldName + "' or " + "@id='"
-				+ fieldName + "' or " + "@type='" + fieldName + "' or " + "@title='" + fieldName + "']";
-			else if("TextArea".equals(fieldType))
-				elementPath = "//textarea[@name='" + fieldName + "' or " + "@value='" + fieldName + "' or " + "@id='"
-						+ fieldName + "' or " + "@type='" + fieldName + "' or " + "@title='" + fieldName + "']";
-			else
-				elementPath = "//input[@name='" + fieldName + "' or " + "@value='" + fieldName + "' or " + "@id='"
-						+ fieldName + "' or " + "@type='" + fieldName + "' or " + "@title='" + fieldName + "']";
-		}
-		else
-			elementPath = fieldName;
+	public By getLocator(String fieldName, String fieldType) {
+		String elementPath = fieldName;
 
 		return By.xpath(elementPath);
 
 	}
-	
-	public By getLocator(String element)
-	{
-		waitForPageToLoad();
-		By locator = null;
-		element = element.trim();
-		if(element.contains("//"))
-			locator = By.xpath(element);
-		else if(element.contains("=")){
-			String type = element.split("=")[0];
-			String text = element.split("=")[1];
-			if(type.trim().equalsIgnoreCase("link"))
-				locator = By.linkText(text);
-			if(type.trim().equalsIgnoreCase("label"))
-				locator = By.xpath("//label[contains(text(), '"+text+"')]");
-		}
-		else
-			locator = By.xpath("//*[@id='"+element+"' or @name='"+element+"']");
-		try{
-		((JavascriptExecutor)driver).executeScript("arguments[0].setAttribute('style', 'background-color: red')", driver.findElement(locator));
-		}catch(Exception e){
-			
-		}
-		System.out.println(locator.toString());
-		return locator;
-	}
-	
-	public void setFilePath(String fieldName, String filePath){
-		if(Boolean.parseBoolean(Configuration.isRCServer)){
-			LocalFileDetector fileDetector = new LocalFileDetector();
-			((RemoteWebDriver)driver).setFileDetector(fileDetector);
-			File file = fileDetector.getLocalFile(filePath);
-			filePath = file.getAbsolutePath();
-		}
-		WebElement element = driver.findElement(getLocator(fieldName));
-		((JavascriptExecutor)driver).executeScript("arguments[0].style = ''; arguments[0].style.display = 'block'; arguments[0].style.visibility = 'visible';", element);
-		element.sendKeys(filePath);
-	}
-
 }

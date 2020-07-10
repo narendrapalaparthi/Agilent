@@ -10,4 +10,5 @@ public interface Configuration {
 	public static String edgeDriver = "";
 	public static String pageLoadTimeout = "180";
 	public static String implicitWait = "5";
+	public static String screenshotPath = "snapshots/";
 }

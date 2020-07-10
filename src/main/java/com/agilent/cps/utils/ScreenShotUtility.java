@@ -18,18 +18,24 @@ import org.openqa.selenium.WebDriver;
 public class ScreenShotUtility {
 	
 	private static final ScreenShotUtility screenShotUtility = new ScreenShotUtility();
-	public static DriverManager elementManager = DriverManager.getInstance();
+	public static DriverManager driverManager = DriverManager.getInstance();
 	
 	public static ScreenShotUtility getInstance()
 	{
 		return screenShotUtility;
 	}
 	
+	public ScreenShotUtility() {
+		File file = new File(Configuration.screenshotPath);
+		if(!file.exists())
+			file.mkdirs();
+	}
+	
 	public void takeWindowScreenshot(String imageName, WebDriver driver)
 	{
 		try {
 			File source = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(source, new File(imageName));
+			FileUtils.copyFile(source, new File(Configuration.screenshotPath+imageName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -64,7 +70,7 @@ public class ScreenShotUtility {
 			{
 				js.executeScript(command);
 				File source = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-				elementManager.sleep(.5);
+				driverManager.sleep(.5);
 				Image bi;
 				
 					bi = ImageIO.read(source);
@@ -77,9 +83,9 @@ public class ScreenShotUtility {
 					y+=windowheight;
 					command = "window.scrollTo(0,"+(windowheight+(windowheight*i))+");";
 			}
-			ImageIO.write(result, "png", new File(imageName));
+			ImageIO.write(result, "png", new File(Configuration.screenshotPath+imageName));
 			command = "window.scrollTo(0,0);";
-			elementManager.sleep(.5);
+			driverManager.sleep(.5);
 			js.executeScript(command);
 		} catch (Exception e) {
 			e.printStackTrace();

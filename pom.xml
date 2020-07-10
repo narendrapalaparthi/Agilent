@@ -51,6 +51,9 @@
 						<suiteXmlFile>testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
 					<systemPropertyVariables>
+						<browser>${browser}</browser>
+						<port>${port}</port>
+						<isRCServer>${isRCServer}</isRCServer>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
