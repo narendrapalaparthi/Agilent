@@ -9,6 +9,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
@@ -144,6 +145,14 @@ public class FieldActions {
 		driverManager.waitForPageToLoad();
 	}
 	
+	public void clickJs(String fieldName){
+		WebElement element = driverManager.getActiveDriver().findElement(By.linkText(fieldName));
+		System.out.println("WebElement Created");
+		driverManager.getJSExecutor().executeScript("arguments[0].click();", element);
+		System.out.println("Click Successful");
+		driverManager.waitForPageToLoad();
+	}
+	
 	public void type(WebElement element, String fieldValue){
 		if("".equals(fieldValue.trim())){
 			element.clear();
@@ -184,4 +193,37 @@ public class FieldActions {
 		WebElement element = driverManager.getWebElement(locator, fieldType);
 		return element.getAttribute("value");
 	}
+	
+	public String getTitle() {
+		return driverManager.getActiveDriver().getTitle();
+	}
+	
+	public void doubleClick(String fieldName) {
+		WebElement element = driverManager.getWebElement(fieldName, "Button");
+		Actions actions = new Actions(driverManager.getActiveDriver());
+		actions.doubleClick(element).build().perform();
+	}
+	
+	public void contextClick(String fieldName) {
+		WebElement element = driverManager.getWebElement(fieldName, "Button");
+		Actions actions = new Actions(driverManager.getActiveDriver());
+		actions.contextClick(element).build().perform();
+	}
+
+	public void focusElement(String locator, String fieldType) {
+		WebElement element = driverManager.getWebElement(locator, fieldType);
+		Actions actions = new Actions(driverManager.getActiveDriver());
+		actions.moveToElement(element).build().perform();
+	}
+
+	public void dragAndDrop(String sourceField, String sourceFieldType, String destinationField, String destinationFiledType) {
+		WebElement source = driverManager.getWebElement(sourceField, sourceFieldType);
+		WebElement destination = driverManager.getWebElement(destinationField, destinationFiledType);
+		Actions actions = new Actions(driverManager.getActiveDriver());
+//		actions.moveToElement(source).clickAndHold().moveToElement(destination).release().build().perform();
+		actions.dragAndDrop(source, destination);
+		
+	}
+	
+	
 }

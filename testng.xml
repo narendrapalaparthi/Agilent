@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="ContainerAutomation">
-	
-	<test name="ContainerTest">
+<suite name="AgilentAutomation">
+	<listeners>
+		<listener class-name="com.agilent.cps.utils.Listener"></listener>
+	</listeners>
+	<test name="CPS Tests">
 		<classes>
 			<class
 				name="com.agilent.cps.tests" />

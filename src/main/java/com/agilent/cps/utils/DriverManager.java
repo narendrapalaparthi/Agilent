@@ -295,7 +295,7 @@ public class DriverManager {
 	}
 	
 	/*
-	 *  Constucts xpath string based on Field Name & Style
+	 *  Constructs xpath string based on Field Name & Style
 	 */
 	public By getLocator(String fieldName, String fieldType) {
 		String elementPath = fieldName;

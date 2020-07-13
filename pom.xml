@@ -50,6 +50,7 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
+					<groups>${groups}</groups>
 					<systemPropertyVariables>
 						<browser>${browser}</browser>
 						<port>${port}</port>

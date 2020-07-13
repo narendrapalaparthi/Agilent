@@ -6,7 +6,7 @@ import com.agilent.cps.common.BaseTest;
 
 public class tests extends BaseTest{
 	
-	@Test
+	@Test(groups= {"test"})
 	public void simpletest() {
 		System.out.println("sample test");
 	}
