@@ -18,6 +18,7 @@ public class Listener implements ITestListener{
 
 	@Override
 	public void onTestFailure(ITestResult result) {
+		result.getThrowable().printStackTrace();
 		ScreenShotUtility.getInstance().takeWindowScreenshot(result.getTestName(), DriverManager.getInstance().getActiveDriver());
 	}
 

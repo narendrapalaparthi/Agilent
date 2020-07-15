@@ -35,7 +35,7 @@ public class ScreenShotUtility {
 	{
 		try {
 			File source = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(source, new File(Configuration.screenshotPath+imageName));
+			FileUtils.copyFile(source, new File(Configuration.screenshotPath+imageName+".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

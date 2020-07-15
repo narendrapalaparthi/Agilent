@@ -14,21 +14,21 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class FieldActions {
+public class SeleniumActions {
 	
-	public static final FieldActions fieldActions = new FieldActions();
+	public static final SeleniumActions fieldActions = new SeleniumActions();
 	public static DriverManager driverManager = DriverManager.getInstance();
 	
 	/*
 	 * Singleton Implementation
 	 */
-	public static FieldActions getInstance()
+	public static SeleniumActions getInstance()
 	{
 		return fieldActions;
 	}
 
-	public void textField(String fieldName, String fieldValue) {
-		WebElement element = driverManager.getWebElement(fieldName, "Text");
+	public void textField(By locator, String fieldValue) {
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement created");
 		if("".equals(fieldValue.trim())){
 			element.clear();
@@ -40,8 +40,8 @@ public class FieldActions {
 		}
 	}
 	
-	public void textArea(String fieldName, String fieldValue) {
-		WebElement element = driverManager.getWebElement(fieldName, "TextArea");
+	public void textArea(By locator, String fieldValue) {
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement created");
 		element.clear();
 		System.out.println("Text cleared");
@@ -49,12 +49,12 @@ public class FieldActions {
 		System.out.println("Text entered in Text Area");
 	}
 	
-	public void radioButtonSingleSelect(String fieldName, String fieldValue) {
-		WebElement element = driverManager.getWebElement("//fieldset[@id='"+fieldName+"']", "RadioButtonSingleSelect");
+	public void radioButtonSingleSelect(By locator, String fieldValue) {
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement created");
 		List<WebElement> inputElements = element.findElements(By.tagName("input"));
 		if(Pattern.matches("[0-9]*", fieldValue))
-			driverManager.getJSExecutor().executeScript("arguments[0].click();",inputElements.get(Integer.parseInt(fieldValue)));
+			inputElements.get(Integer.parseInt(fieldValue)).click();
 		else
 			for(WebElement ele : inputElements)
 			{
@@ -67,23 +67,21 @@ public class FieldActions {
 		System.out.println("Radio Button Clicked");
 	}
 	
-	public void radioButton(String fieldName, String fieldValue) {
-		int index = fieldName.lastIndexOf("_");
-		String identifier = "//input[@name='"+fieldName.substring(0,index)+"' and @value='"+fieldName.substring(index+1)+"']";
-		driverManager.getWebElement(identifier, "Radio").click();
+	public void radioButton(By locator) {
+		driverManager.getWebElement(locator).click();
 		System.out.println("Radio Button Clicked");
 	}
 	
-	public void checkBox(String fieldName, String fieldValue) {
-		WebElement element = driverManager.getWebElement(fieldName, "CheckBox");
+	public void checkBox(By locator, String fieldValue) {
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement created");
 		if(element.isSelected() ^ Boolean.parseBoolean(fieldValue))
 			element.click();
 		System.out.println("Checkbox Checked");
 	}
 	
-	public void dropdown(String fieldName, String fieldValue) {
-		WebElement element = driverManager.getWebElement(fieldName, "Dropdown");
+	public void dropdown(By locator, String fieldValue) {
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement created");
 		Select select = new Select(element);
 		if(Pattern.matches("[0-9]*", fieldValue))
@@ -93,13 +91,13 @@ public class FieldActions {
 		System.out.println("Option Selected");
 	}
 	
-	public void multiSelect(String fieldName, String fieldValue){
-		WebElement element = driverManager.getWebElement(fieldName, "Dropdown");
+	public void multiSelect(By locator, String fieldValue){
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement created");
 		Select select = new Select(element);
 		for(WebElement ele : select.getAllSelectedOptions())
 			ele.click();
-		element = driverManager.getWebElement(fieldName, "Dropdown");
+		element = driverManager.getWebElement(locator);
 		select = new Select(element);
 		if(Pattern.matches("[0-9]*", fieldValue))
 			select.getOptions().get(Integer.parseInt(fieldValue)).click();
@@ -108,52 +106,40 @@ public class FieldActions {
 		System.out.println("Option Selected");
 	}
 	
-	public void optionSelector(String fieldName, String fieldValue){
-		WebElement element = driverManager.getWebElement(fieldName+".Options", "Dropdown");
-		System.out.println("WebElement created");
-		Select select = new Select(element);
-		if(Pattern.matches("[0-9]*", fieldValue))
-			select.selectByIndex(Integer.parseInt(fieldValue));
-		else
-			select.selectByVisibleText(fieldValue);
-		click("action."+fieldName+".OptionSelectorAdd");
-		System.out.println("Option Selected");
-	}
-	
-	public void click(String fieldName){
-		WebElement element = driverManager.getWebElement(fieldName, "Button");
+	public void click(By locator){
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement Created");
 		element.click();
 		System.out.println("Click Successful");
 		driverManager.waitForPageToLoad();
 	}
 	
-	public void clickButton(String fieldName){
-		String identifier = "//button[contains(text(),'" + fieldName + "')]";
-		WebElement element = driverManager.getWebElement(identifier, "Button");
+	public void clickButton(By locator){
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement Created");
 		element.click();
 		System.out.println("Click Successful");
 		driverManager.waitForPageToLoad();
 	}
 	
-	public void clickLink(String fieldName){
-		WebElement element = driverManager.getActiveDriver().findElement(By.linkText(fieldName));
+	public void clickLink(String linkText){
+		WebElement element = driverManager.getActiveDriver().findElement(By.linkText(linkText));
 		System.out.println("WebElement Created");
 		element.click();
 		System.out.println("Click Successful");
 		driverManager.waitForPageToLoad();
 	}
 	
-	public void clickJs(String fieldName){
-		WebElement element = driverManager.getActiveDriver().findElement(By.linkText(fieldName));
+	public void clickJs(By locator){
+		WebElement element = driverManager.getActiveDriver().findElement(locator);
 		System.out.println("WebElement Created");
 		driverManager.getJSExecutor().executeScript("arguments[0].click();", element);
 		System.out.println("Click Successful");
 		driverManager.waitForPageToLoad();
 	}
 	
-	public void type(WebElement element, String fieldValue){
+	public void type(By locator, String fieldValue){
+		WebElement element = driverManager.getActiveDriver().findElement(locator);
 		if("".equals(fieldValue.trim())){
 			element.clear();
 			System.out.println("Text cleared");
@@ -164,7 +150,7 @@ public class FieldActions {
 		}
 	}
 	
-	public void setFilePath(String fieldName, String filePath){
+	public void setFilePath(By locator, String filePath){
 		WebDriver driver = DriverManager.getInstance().getActiveDriver();
 		if(Boolean.parseBoolean(Configuration.isRCServer)){
 			LocalFileDetector fileDetector = new LocalFileDetector();
@@ -172,25 +158,25 @@ public class FieldActions {
 			File file = fileDetector.getLocalFile(filePath);
 			filePath = file.getAbsolutePath();
 		}
-		WebElement element = driver.findElement(DriverManager.getInstance().getLocator(fieldName, "text"));
+		WebElement element = driver.findElement(locator);
 		((JavascriptExecutor)driver).executeScript("arguments[0].style = ''; arguments[0].style.display = 'block'; arguments[0].style.visibility = 'visible';", element);
 		element.sendKeys(filePath);
 	}
 	
-	public String getText(String fieldName, String fieldType, Boolean xpathConstructor){
-		WebElement element = driverManager.getWebElement(fieldName, fieldType);
+	public String getText(By locator, Boolean xpathConstructor){
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement Created");
 		return element.getText();
 	}
 	
-	public String getAttribute(String fieldName, String fieldType, Boolean xpathConstructor, String attribute){
-		WebElement element = driverManager.getWebElement(fieldName, fieldType);
+	public String getAttribute(By locator, String attribute){
+		WebElement element = driverManager.getWebElement(locator);
 		System.out.println("WebElement Created");
 		return element.getAttribute(attribute);
 	}
 	
-	public String getValue(String locator, String fieldType){
-		WebElement element = driverManager.getWebElement(locator, fieldType);
+	public String getValue(By locator, String fieldType){
+		WebElement element = driverManager.getWebElement(locator);
 		return element.getAttribute("value");
 	}
 	
@@ -198,27 +184,27 @@ public class FieldActions {
 		return driverManager.getActiveDriver().getTitle();
 	}
 	
-	public void doubleClick(String fieldName) {
-		WebElement element = driverManager.getWebElement(fieldName, "Button");
+	public void doubleClick(By locator) {
+		WebElement element = driverManager.getWebElement(locator);
 		Actions actions = new Actions(driverManager.getActiveDriver());
 		actions.doubleClick(element).build().perform();
 	}
 	
-	public void contextClick(String fieldName) {
-		WebElement element = driverManager.getWebElement(fieldName, "Button");
+	public void contextClick(By locator) {
+		WebElement element = driverManager.getWebElement(locator);
 		Actions actions = new Actions(driverManager.getActiveDriver());
 		actions.contextClick(element).build().perform();
 	}
 
-	public void focusElement(String locator, String fieldType) {
-		WebElement element = driverManager.getWebElement(locator, fieldType);
+	public void focusElement(By locator) {
+		WebElement element = driverManager.getWebElement(locator);
 		Actions actions = new Actions(driverManager.getActiveDriver());
 		actions.moveToElement(element).build().perform();
 	}
 
-	public void dragAndDrop(String sourceField, String sourceFieldType, String destinationField, String destinationFiledType) {
-		WebElement source = driverManager.getWebElement(sourceField, sourceFieldType);
-		WebElement destination = driverManager.getWebElement(destinationField, destinationFiledType);
+	public void dragAndDrop(By sourceLocator, By destinationLocator) {
+		WebElement source = driverManager.getWebElement(sourceLocator);
+		WebElement destination = driverManager.getWebElement(destinationLocator);
 		Actions actions = new Actions(driverManager.getActiveDriver());
 //		actions.moveToElement(source).clickAndHold().moveToElement(destination).release().build().perform();
 		actions.dragAndDrop(source, destination);

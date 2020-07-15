@@ -1,4 +1,4 @@
-package com.agilent.cps.common;
+package com.agilent.cps.tests;
 
 
 import java.lang.reflect.Method;
