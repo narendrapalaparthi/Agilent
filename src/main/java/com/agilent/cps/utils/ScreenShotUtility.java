@@ -26,7 +26,7 @@ public class ScreenShotUtility {
 	}
 	
 	public ScreenShotUtility() {
-		File file = new File(Configuration.screenshotPath);
+		File file = new File(Constants.screenshotPath);
 		if(!file.exists())
 			file.mkdirs();
 	}
@@ -35,7 +35,7 @@ public class ScreenShotUtility {
 	{
 		try {
 			File source = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(source, new File(Configuration.screenshotPath+imageName+".png"));
+			FileUtils.copyFile(source, new File(Constants.screenshotPath+imageName+".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -83,7 +83,7 @@ public class ScreenShotUtility {
 					y+=windowheight;
 					command = "window.scrollTo(0,"+(windowheight+(windowheight*i))+");";
 			}
-			ImageIO.write(result, "png", new File(Configuration.screenshotPath+imageName+".png"));
+			ImageIO.write(result, "png", new File(Constants.screenshotPath+imageName+".png"));
 			command = "window.scrollTo(0,0);";
 			driverManager.sleep(.5);
 			js.executeScript(command);

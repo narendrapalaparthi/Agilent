@@ -24,7 +24,7 @@ public class Listener implements ITestListener{
 
 	@Override
 	public void onTestSkipped(ITestResult result) {
-		
+		result.getThrowable().printStackTrace();
 	}
 
 	@Override

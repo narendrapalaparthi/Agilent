@@ -152,7 +152,7 @@ public class SeleniumActions {
 	
 	public void setFilePath(By locator, String filePath){
 		WebDriver driver = DriverManager.getInstance().getActiveDriver();
-		if(Boolean.parseBoolean(Configuration.isRCServer)){
+		if(Boolean.parseBoolean(Constants.isrcserver)){
 			LocalFileDetector fileDetector = new LocalFileDetector();
 			((RemoteWebDriver)driver).setFileDetector(fileDetector);
 			File file = fileDetector.getLocalFile(filePath);

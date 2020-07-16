@@ -26,8 +26,8 @@ public class Browser{
 		WebDriver driver = initializeBrowser();
 		System.out.println("Browser launched Successfully");
 		driverManager.setActiveDriver(driver);
-		driver.manage().timeouts().pageLoadTimeout(Integer.parseInt(Configuration.pageLoadTimeout), TimeUnit.SECONDS);
-		driver.manage().timeouts().implicitlyWait(Integer.parseInt(Configuration.implicitWait), TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(Integer.parseInt(Constants.pageLoadTimeout), TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(Integer.parseInt(Constants.implicitWait), TimeUnit.SECONDS);
 		driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
 		driver.get(startUrl);
@@ -47,7 +47,7 @@ public class Browser{
 	 */
 	private WebDriver initializeBrowser()
 	{
-		String browser = Configuration.browser;
+		String browser = Constants.browser;
 		switch (browser) {
 		case "IE":
 			return getIEDriver();
@@ -70,12 +70,12 @@ public class Browser{
 	{
 		WebDriver driver = null;
 		if(null == System.getProperty("webdriver.gecko.driver"))
-			System.setProperty("webdriver.gecko.driver", Configuration.firefoxDriver);
-		if(Boolean.parseBoolean(Configuration.isRCServer))
+			System.setProperty("webdriver.gecko.driver", Constants.firefoxDriver);
+		if(Boolean.parseBoolean(Constants.isrcserver))
 		{
 			DesiredCapabilities DC_FF = DesiredCapabilities.firefox();
 			DC_FF.setJavascriptEnabled(true);
-			String url = "http://localhost:"+Configuration.port+"/wd/hub";
+			String url = "http://localhost:"+Constants.port+"/wd/hub";
 			
 			try {
 				driver = new RemoteWebDriver(new URL(url), DC_FF);
@@ -93,15 +93,15 @@ public class Browser{
 	{
 		WebDriver driver = null;
 		if(null == System.getProperty("webdriver.ie.driver"))
-			System.setProperty("webdriver.ie.driver", Configuration.ieDriver);
-		if(Boolean.parseBoolean(Configuration.isRCServer))
+			System.setProperty("webdriver.ie.driver", Constants.ieDriver);
+		if(Boolean.parseBoolean(Constants.isrcserver))
 		{
 			DesiredCapabilities DC_IE = DesiredCapabilities.internetExplorer();
 			DC_IE.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
 			DC_IE.setCapability(InternetExplorerDriver.NATIVE_EVENTS, true);
 			DC_IE.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
 			DC_IE.setCapability("ignoreProtectedModeSettings",true);
-			String url = "http://localhost:"+Configuration.port+"/wd/hub";
+			String url = "http://localhost:"+Constants.port+"/wd/hub";
 			
 			try {
 				driver = new RemoteWebDriver(new URL(url), DC_IE);
@@ -118,15 +118,15 @@ public class Browser{
 	{
 		WebDriver driver = null;
 		if(null == System.getProperty("webdriver.edge.driver"))
-			System.setProperty("webdriver.edge.driver", Configuration.edgeDriver);
-		if(Boolean.parseBoolean(Configuration.isRCServer))
+			System.setProperty("webdriver.edge.driver", Constants.edgeDriver);
+		if(Boolean.parseBoolean(Constants.isrcserver))
 		{
 			DesiredCapabilities DC_Edge = DesiredCapabilities.edge();
 			DC_Edge.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
 			DC_Edge.setCapability(InternetExplorerDriver.NATIVE_EVENTS, true);
 			DC_Edge.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
 			DC_Edge.setCapability("ignoreProtectedModeSettings",true);
-			String url = "http://localhost:"+Configuration.port+"/wd/hub";
+			String url = "http://localhost:"+Constants.port+"/wd/hub";
 			
 			try {
 				driver = new RemoteWebDriver(new URL(url), DC_Edge);
@@ -143,7 +143,7 @@ public class Browser{
 	{
 		WebDriver driver = null;
 		if(null == System.getProperty("webdriver.chrome.driver"))
-			System.setProperty("webdriver.chrome.driver", Configuration.chromeDriver);
+			System.setProperty("webdriver.chrome.driver", Constants.chromeDriver);
 		
 		HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
 		chromePrefs.put("profile.default_content_settings.popups", 0);
@@ -155,9 +155,9 @@ public class Browser{
 		DesiredCapabilities DC_Chrome = DesiredCapabilities.chrome();
 		DC_Chrome.setCapability("enableNativeEvents", true);
 		DC_Chrome.setCapability(ChromeOptions.CAPABILITY, options);
-		if(Boolean.parseBoolean(Configuration.isRCServer))
+		if(Boolean.parseBoolean(Constants.isrcserver))
 		{
-			String url = "http://localhost:"+Configuration.port+"/wd/hub";
+			String url = "http://localhost:"+Constants.port+"/wd/hub";
 			
 			try {
 				driver = new RemoteWebDriver(new URL(url), DC_Chrome);
@@ -166,7 +166,7 @@ public class Browser{
 			}
 		}
 		else
-			driver = new ChromeDriver(DC_Chrome);
+			driver = new ChromeDriver(options);
 			
 		return driver;
 	}
@@ -181,7 +181,7 @@ public class Browser{
 //		DC_Android.setCapability(MobileCapabilityType.DEVICE_NAME, "My Phone");
 		
 		if(null == System.getProperty("webdriver.chrome.driver"))
-			System.setProperty("webdriver.chrome.driver", Configuration.chromeDriver);
+			System.setProperty("webdriver.chrome.driver", Constants.chromeDriver);
 		
 		ChromeOptions chromeOptions = new ChromeOptions();
 		chromeOptions.setExperimentalOption("androidPackage","com.android.chrome");
