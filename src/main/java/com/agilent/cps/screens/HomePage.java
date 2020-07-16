@@ -10,6 +10,7 @@ public class HomePage extends BaseScreen {
 	public void clickCpsMenulink() {
 		seleniumActions.type(searchText, "Agilent");
 		seleniumActions.click(cpsMenuLink);
+		seleniumActions.clickLink("agl");
 	}
 	
 }

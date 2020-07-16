@@ -83,7 +83,7 @@ public class ScreenShotUtility {
 					y+=windowheight;
 					command = "window.scrollTo(0,"+(windowheight+(windowheight*i))+");";
 			}
-			ImageIO.write(result, "png", new File(Configuration.screenshotPath+imageName));
+			ImageIO.write(result, "png", new File(Configuration.screenshotPath+imageName+".png"));
 			command = "window.scrollTo(0,0);";
 			driverManager.sleep(.5);
 			js.executeScript(command);
