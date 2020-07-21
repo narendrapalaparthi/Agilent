@@ -130,6 +130,14 @@ public class SeleniumActions {
 		driverManager.waitForPageToLoad();
 	}
 	
+	public void clickLinkWithParialText(String partialLinkText){
+		WebElement element = driverManager.getActiveDriver().findElement(By.partialLinkText(partialLinkText));
+		System.out.println("WebElement Created");
+		element.click();
+		System.out.println("Click Successful");
+		driverManager.waitForPageToLoad();
+	}
+	
 	public void clickJs(By locator){
 		WebElement element = driverManager.getActiveDriver().findElement(locator);
 		System.out.println("WebElement Created");

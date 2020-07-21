@@ -148,7 +148,7 @@ public class Browser{
 		HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
 		chromePrefs.put("profile.default_content_settings.popups", 0);
 		chromePrefs.put("safebrowsing.enabled", "true");
-		chromePrefs.put("download.default_directory", System.getProperty("user.dir")+"\\metadata");
+//		chromePrefs.put("download.default_directory", System.getProperty("user.dir")+"\\metadata");
 		ChromeOptions options = new ChromeOptions();
 		options.setExperimentalOption("prefs", chromePrefs);
         options.addArguments("--no-sandbox");
@@ -166,7 +166,7 @@ public class Browser{
 			}
 		}
 		else
-			driver = new ChromeDriver(options);
+			driver = new ChromeDriver(DC_Chrome);
 			
 		return driver;
 	}

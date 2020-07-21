@@ -36,7 +36,7 @@ public class BaseTest implements ITest{
 	@BeforeMethod(alwaysRun = true)
 	public void launchBrowser(Method method) {
 		testname=method.getName();
-		browser.startBrowser("https://www.google.co.in/");
+		browser.startBrowser("https://www.agilent.com/");
 	}
 	
 	@AfterMethod(alwaysRun = true)
