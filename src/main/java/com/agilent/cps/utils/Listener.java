@@ -8,7 +8,7 @@ public class Listener implements ITestListener{
 
 	@Override
 	public void onTestStart(ITestResult result) {
-		System.out.println("################## Test Started : "+result.getName()+" ##############");
+		Logger.getInstance().info("################## Test Started : "+result.getName()+" ##############");
 	}
 
 	@Override
@@ -18,8 +18,7 @@ public class Listener implements ITestListener{
 
 	@Override
 	public void onTestFailure(ITestResult result) {
-		result.getThrowable().printStackTrace();
-		ScreenShotUtility.getInstance().takeScrollingScreenshot(result.getTestName(), DriverManager.getInstance().getActiveDriver());
+		Logger.getInstance().error(result.getThrowable());
 	}
 
 	@Override

@@ -6,10 +6,16 @@
 		<listener class-name="com.agilent.cps.utils.Listener"></listener>
 	</listeners>
 	<test name="CPS Tests">
+		<groups>
+			<run>
+				<include name="author"></include>
+				<include name="test"></include>
+			</run>
+		</groups>
 		<classes>
-			<class
-				name="com.agilent.cps.tests.tests" />
+			<class name="com.agilent.cps.tests.tests" />
+			<class name="com.agilent.cps.author.AuthorTests" />
 		</classes>
 	</test>
-	
+
 </suite>

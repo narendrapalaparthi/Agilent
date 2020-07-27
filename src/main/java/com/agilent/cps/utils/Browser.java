@@ -17,6 +17,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 public class Browser{
 	
 	public static DriverManager driverManager = DriverManager.getInstance();
+	public static com.agilent.cps.core.DriverManager DM = com.agilent.cps.core.DriverManager.getInstance();
 	
 	/*
 	 * To Initiate and Load URL into Browser
@@ -26,6 +27,7 @@ public class Browser{
 		WebDriver driver = initializeBrowser();
 		System.out.println("Browser launched Successfully");
 		driverManager.setActiveDriver(driver);
+		DM.setActiveDriver(driver);
 		driver.manage().timeouts().pageLoadTimeout(Integer.parseInt(Constants.pageLoadTimeout), TimeUnit.SECONDS);
 		driver.manage().timeouts().implicitlyWait(Integer.parseInt(Constants.implicitWait), TimeUnit.SECONDS);
 		driver.manage().deleteAllCookies();

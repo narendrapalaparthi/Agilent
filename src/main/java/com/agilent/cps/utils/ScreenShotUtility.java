@@ -15,29 +15,35 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import com.agilent.cps.core.DriverManager;
+
 public class ScreenShotUtility {
 	
 	private static final ScreenShotUtility screenShotUtility = new ScreenShotUtility();
-	public static DriverManager driverManager = DriverManager.getInstance();
+	private String imagePath = "";
+	DriverManager adfManager = DriverManager.getInstance();
+	Logger logger = Logger.getInstance();
+	public ScreenShotUtility()
+	{
+		String basePath = "logs";
+		imagePath = basePath+"\\images\\";
+		File file = new File(imagePath); 
+		if(!file.exists())
+			file.mkdirs();
+	}
 	
 	public static ScreenShotUtility getInstance()
 	{
 		return screenShotUtility;
 	}
 	
-	public ScreenShotUtility() {
-		File file = new File(Constants.screenshotPath);
-		if(!file.exists())
-			file.mkdirs();
-	}
-	
 	public void takeWindowScreenshot(String imageName, WebDriver driver)
 	{
 		try {
 			File source = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(source, new File(Constants.screenshotPath+imageName+".png"));
+			FileUtils.copyFile(source, new File(imagePath+imageName));
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -70,7 +76,7 @@ public class ScreenShotUtility {
 			{
 				js.executeScript(command);
 				File source = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-				driverManager.sleep(.5);
+				sleep(.5);
 				Image bi;
 				
 					bi = ImageIO.read(source);
@@ -83,13 +89,68 @@ public class ScreenShotUtility {
 					y+=windowheight;
 					command = "window.scrollTo(0,"+(windowheight+(windowheight*i))+");";
 			}
-			ImageIO.write(result, "png", new File(Constants.screenshotPath+imageName+".png"));
+			ImageIO.write(result, "png", new File(imagePath+imageName));
 			command = "window.scrollTo(0,0);";
-			driverManager.sleep(.5);
+			sleep(.5);
 			js.executeScript(command);
 		} catch (Exception e) {
+			logger.error("Unable to Capture Screenshot", false);
+		}
+	}
+	
+	public void takeScreenshot()
+	{
+		takeScreenshot(true);
+	}
+	
+	public void takeScreenshot(Boolean flag)
+	{
+		WebDriver driver = adfManager.getCurrentWebDriver();
+		String imageName = genarateScreenshotPath();
+		if(flag)
+		{
+			screenShotUtility.takeScrollingScreenshot(imageName, driver);
+			logger.infoWithScreenshot("Captured Scrolling Screenshot : "+imagePath+imageName, imageName);
+		}
+		else
+		{
+			screenShotUtility.takeWindowScreenshot(imageName, driver);
+			logger.infoWithScreenshot("Captured Window Screenshot : "+imagePath+imageName, imageName);
+		}
+	}
+	
+	public void takeScreenshotWithMessage(String loggerType, String message, Boolean flag)
+	{
+		WebDriver driver = adfManager.getCurrentWebDriver();
+		if(null!=driver)
+		{
+		String imageName = genarateScreenshotPath();
+		if(flag)
+		{
+			screenShotUtility.takeScrollingScreenshot(imageName, driver);
+			logger.Screenshot(loggerType, message, imageName);
+		}
+		else
+		{
+			screenShotUtility.takeWindowScreenshot(imageName, driver);
+			logger.Screenshot(loggerType, message, imageName);
+		}
+		}
+		else
+			logger.error(message, false);
+	}
+
+	private String genarateScreenshotPath() {
+		return "img_"+System.currentTimeMillis()+".png";
+	}
+	
+	public void sleep(double sec) {
+		try {
+			Thread.sleep((long) (sec*1000));
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
+
 
 }
